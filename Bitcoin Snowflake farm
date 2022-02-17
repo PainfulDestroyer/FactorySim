@@ -2,6 +2,7 @@ local snow = false
 local algo = false
 local clock = false
 local boost = false
+local crate = false
 
 
 local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/AikaV3rm/UiLib/master/Lib.lua')))()
@@ -26,6 +27,11 @@ end)
 c:Toggle("Auto Boost Star", function(bool)
 	boost = bool
 end)
+
+c:Toggle("Auto Crates", function(bool)
+	crate = bool
+end)
+
 
 
 b:Slider("Walkspeed",{
@@ -88,14 +94,32 @@ while true do
 		end
 		
 		if clock then
-			wait(5)
+			local clockpath = game:GetService("Players").LocalPlayer.PlayerGui.Energy.Frame.Overclock.Overclock.Lock.AviTitle
+			if clockpath.Visible == false then
+			wait()
 			game:GetService("ReplicatedStorage").Events.Overclk:InvokeServer()
+			end
 		end
 		
 		if boost then
-			wait(5)
+			local boostpath = game:GetService("Players").LocalPlayer.PlayerGui.Boosts.Bar.TextLabel.Tim
+			if boostpath.Text == "" then
+				wait(1)
 			game:GetService("ReplicatedStorage").Events.ClaimFreeBoostStar:FireServer()
-
+			end
+		end
+		
+		if crate then
+			local normalpath = game:GetService("Players").LocalPlayer.PlayerGui.Crates.Frame.ClmN
+			local smallpath = game:GetService("Players").LocalPlayer.PlayerGui.Crates.Frame.ClmS
+			if normalpath.Visible == true then
+				local args = {[1] = false}
+				game:GetService("ReplicatedStorage").Events.ClmFrCrt:FireServer(unpack(args))
+				end
+			if smallpath.Visible == true then
+				local args = {[1] = true}
+				game:GetService("ReplicatedStorage").Events.ClmFrCrt:FireServer(unpack(args))
+			end
 		end
 		
 	end)
